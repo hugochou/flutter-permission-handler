@@ -119,7 +119,7 @@ class _PermissionState extends State<PermissionWidget> {
     return ListTile(
       title: Text(
         _permission.toString(),
-        style: Theme.of(context).textTheme.bodyLarge,
+        style: Theme.of(context).textTheme.bodyText2,
       ),
       subtitle: Text(
         _permissionStatus.toString(),
@@ -142,9 +142,8 @@ class _PermissionState extends State<PermissionWidget> {
     );
   }
 
-  void checkServiceStatus(
-      BuildContext context, PermissionWithService permission) async {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  void checkServiceStatus(BuildContext context, PermissionWithService permission) async {
+    Scaffold.of(context).showSnackBar(SnackBar(
       content: Text((await permission.serviceStatus).toString()),
     ));
   }

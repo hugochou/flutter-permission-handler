@@ -1,5 +1,5 @@
-import 'dart:html' as html;
 import 'dart:async';
+import 'dart:html' as html;
 
 import 'package:permission_handler_platform_interface/permission_handler_platform_interface.dart';
 
@@ -8,21 +8,21 @@ import 'package:permission_handler_platform_interface/permission_handler_platfor
 class WebDelegate {
   /// Constructs a WebDelegate.
   WebDelegate(
-    html.MediaDevices? devices,
-    html.Geolocation? geolocation,
-    html.Permissions? permissions,
+    html.MediaDevices devices,
+    html.Geolocation geolocation,
+    html.Permissions permissions,
   )   : _devices = devices,
         _geolocation = geolocation,
         _htmlPermissions = permissions;
 
   /// The html media devices object used to request camera and microphone permissions.
-  final html.MediaDevices? _devices;
+  final html.MediaDevices _devices;
 
   /// The html geolocation object used to request location permission.
-  final html.Geolocation? _geolocation;
+  final html.Geolocation _geolocation;
 
   /// The html permissions object used to check permission status.
-  final html.Permissions? _htmlPermissions;
+  final html.Permissions _htmlPermissions;
 
   /// The permission name to request access to the camera.
   static const _microphonePermissionName = 'microphone';
@@ -46,7 +46,7 @@ class WebDelegate {
   /// The status indicates that permission can be requested.
   static const _promptPermissionStatus = 'prompt';
 
-  PermissionStatus _toPermissionStatus(String? webPermissionStatus) {
+  PermissionStatus _toPermissionStatus(String webPermissionStatus) {
     switch (webPermissionStatus) {
       case _grantedPermissionStatus:
         return PermissionStatus.granted;
@@ -58,7 +58,7 @@ class WebDelegate {
     }
   }
 
-  Future<PermissionStatus> _permissionStatusState(String webPermissionName, html.Permissions? permissions) async {
+  Future<PermissionStatus> _permissionStatusState(String webPermissionName, html.Permissions permissions) async {
     final webPermissionStatus = await permissions?.query({'name': webPermissionName});
     return _toPermissionStatus(webPermissionStatus?.state);
   }
@@ -69,7 +69,7 @@ class WebDelegate {
     }
 
     try {
-      html.MediaStream mediaStream = await _devices!.getUserMedia({'audio': true});
+      html.MediaStream mediaStream = await _devices.getUserMedia({'audio': true});
 
       // In browsers, calling [getUserMedia] will start the recording
       // automatically right after. This is undesired behavior as
@@ -97,7 +97,7 @@ class WebDelegate {
     }
 
     try {
-      html.MediaStream mediaStream = await _devices!.getUserMedia({'video': true});
+      html.MediaStream mediaStream = await _devices.getUserMedia({'video': true});
 
       // In browsers, calling [getUserMedia] will start the recording
       // automatically right after. This is undesired behavior as
@@ -132,13 +132,19 @@ class WebDelegate {
   }
 
   Future<PermissionStatus> _requestSingularPermission(Permission permission) async {
-    bool permissionGranted = switch (permission) {
-      Permission.microphone => await _requestMicrophonePermission(),
-      Permission.camera => await _requestCameraPermission(),
-      Permission.notification => await _requestNotificationPermission(),
-      Permission.location => await _requestLocationPermission(),
-      _ => throw UnsupportedError('The ${permission.toString()} permission is currently not supported on web.')
-    };
+    bool permissionGranted;
+    final value = permission.value;
+    if (value == Permission.microphone.value) {
+      permissionGranted = await _requestMicrophonePermission();
+    } else if (value == Permission.camera.value) {
+      permissionGranted = await _requestCameraPermission();
+    } else if (value == Permission.notification.value) {
+      permissionGranted = await _requestNotificationPermission();
+    } else if (value == Permission.location.value) {
+      permissionGranted = await _requestLocationPermission();
+    } else {
+      throw UnsupportedError('The ${permission.toString()} permission is currently not supported on web.');
+    }
 
     if (!permissionGranted) {
       return PermissionStatus.permanentlyDenied;
@@ -166,24 +172,20 @@ class WebDelegate {
   /// Checks the current status of the given [Permission].
   Future<PermissionStatus> checkPermissionStatus(Permission permission) async {
     String webPermissionName;
-    switch (permission) {
-      case Permission.microphone:
-        webPermissionName = _microphonePermissionName;
-        break;
-      case Permission.camera:
-        webPermissionName = _cameraPermissionName;
-        break;
-      case Permission.notification:
-        webPermissionName = _notificationsPermissionName;
-        break;
-      case Permission.location:
-        webPermissionName = _locationPermissionName;
-        break;
-      default:
-        throw UnimplementedError(
-          'checkPermissionStatus() has not been implemented for ${permission.toString()} '
-          'on web.',
-        );
+    final value = permission.value;
+    if (value == Permission.microphone.value) {
+      webPermissionName = _microphonePermissionName;
+    } else if (value == Permission.camera.value) {
+      webPermissionName = _cameraPermissionName;
+    } else if (value == Permission.notification.value) {
+      webPermissionName = _notificationsPermissionName;
+    } else if (value == Permission.location.value) {
+      webPermissionName = _locationPermissionName;
+    } else {
+      throw UnimplementedError(
+        'checkPermissionStatus() has not been implemented for ${permission.toString()} '
+        'on web.',
+      );
     }
     return _permissionStatusState(webPermissionName, _htmlPermissions);
   }

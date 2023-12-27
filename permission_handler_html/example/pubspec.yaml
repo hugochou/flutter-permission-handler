@@ -2,16 +2,19 @@ name: permission_handler_html_example
 description: Demonstrates how to use the permission_handler_html plugin.
 
 environment:
-  sdk: ">=3.0.5 <4.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  baseflow_plugin_template: ^2.1.2
+  baseflow_plugin_template:
+    git:
+      url: https://github.com/hugochou/baseflow_plugin_template.git
+      ref: flutter_1.22.6
   flutter:
     sdk: flutter
 
 dev_dependencies:
-  integration_test:
-    sdk: flutter
+#  integration_test:
+#    sdk: flutter
   flutter_test:
     sdk: flutter
 
@@ -23,7 +26,7 @@ dev_dependencies:
     # the parent directory to use the current plugin's version.
     path: ../
 
-  url_launcher: ^6.0.12
+  url_launcher: ^5.7.10
 
 flutter:
   uses-material-design: true
