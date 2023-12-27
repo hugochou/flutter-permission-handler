@@ -15,6 +15,7 @@ dependencies:
   permission_handler_platform_interface:
     git:
       url: https://github.com/hugochou/flutter-permission-handler.git
+      path: permission_handler_platform_interface
       ref: flutter_1.22.6
 
 dependency_overrides:

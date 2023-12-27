@@ -25,24 +25,30 @@ dependencies:
     sdk: flutter
   meta:
   permission_handler_android:
-    path: ../permission_handler_android
-#    git:
-#      url: https://github.com/hugochou/flutter-permission-handler.git
-#      ref: flutter_1.22.6
+    git:
+      url: https://github.com/hugochou/flutter-permission-handler.git
+      path: permission_handler_android
+      ref: flutter_1.22.6
   permission_handler_apple:
-    path: ../permission_handler_apple
-#    git:
-#      url: https://github.com/hugochou/flutter-permission-handler.git
-#      ref: flutter_1.22.6
+    git:
+      url: https://github.com/hugochou/flutter-permission-handler.git
+      path: permission_handler_apple
+      ref: flutter_1.22.6
 #  permission_handler_html:
-#    path: ../permission_handler_html
-#  permission_handler_windows:
-#    path: ../permission_handler_windows
-  permission_handler_platform_interface:
-    path: ../permission_handler_platform_interface
 #    git:
 #      url: https://github.com/hugochou/flutter-permission-handler.git
+#      path: permission_handler_html
 #      ref: flutter_1.22.6
+#  permission_handler_windows:
+#    git:
+#      url: https://github.com/hugochou/flutter-permission-handler.git
+#      path: permission_handler_windows
+#      ref: flutter_1.22.6
+  permission_handler_platform_interface:
+    git:
+      url: https://github.com/hugochou/flutter-permission-handler.git
+      path: permission_handler_platform_interface
+      ref: flutter_1.22.6
 
 dependency_overrides:
   permission_handler_android:
